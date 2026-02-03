@@ -12,6 +12,7 @@ public class MapPatcher
     {
         if (IsTerrianSeeThroughForceEnabled)
         {
+            IsTerrianSeeThroughForceEnabled = false;
             MelonEvents.OnUpdate.Unsubscribe(stormDrain_Update);
         }
         if (sceneName is "Splashes" or "Bootstrap")
@@ -20,6 +21,7 @@ public class MapPatcher
             Addressables.LoadAsset<UnityEngine.ResourceManagement.ResourceProviders.IAssetBundleResource>(
                 "b75fae7cc98036167227c7451fa91add.bundle"
             );
+
         shaderFetch.WaitForCompletion();
         Shader shader = shaderFetch
             .Result.GetAssetBundle()

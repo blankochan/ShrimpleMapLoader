@@ -8,10 +8,9 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 [assembly: MelonInfo(
     typeof(ShrimpleMapLoader.Loader),
     "ShrimpleMapLoader",
-    "0.0.1",
+    "0.0.2",
     "ZabelTheBanal"
 )]
-
 namespace ShrimpleMapLoader;
 
 public class Loader : MelonMod
@@ -31,15 +30,11 @@ public class Loader : MelonMod
 
     public override void OnSceneWasLoaded(int buildIndex, string sceneName)
     {
-        if (sceneName is not "Splashes")
-            return;
+        if (sceneName is not "Splashes") return;
+
         LoggerInstance.Msg("Installing Extra Maps");
-        var locator = Addressables
-            .Instance.m_ResourceLocators[0]
-            .Locator.Cast<UnityEngine.AddressableAssets.ResourceLocators.ResourceLocationMap>();
-        var originalMaps = locator
-            .Locations["Maps"]
-            .Cast<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation>>();
+        var locator = Addressables.Instance.m_ResourceLocators[0].Locator.Cast<UnityEngine.AddressableAssets.ResourceLocators.ResourceLocationMap>();
+        var originalMaps = locator.Locations["Maps"].Cast<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation>>();
         string[] mapPaths = Directory.GetDirectories("./UserData/Maps/");
 
         List<IResourceLocation> newMaps = new();
@@ -57,9 +52,11 @@ public class Loader : MelonMod
 
         Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<IResourceLocation> arr =
             new(3 + newMaps.Count);
-        arr[0] = originalMaps[0];
-        arr[1] = originalMaps[1];
-        arr[2] = originalMaps[2];
+
+        for (int i = 0; i < originalMaps.Count; i++)
+        {
+            arr[i] = originalMaps[i];
+        }
 
         for (int i = 0; i < newMaps.Count; i++)
         {
@@ -83,13 +80,15 @@ public class Loader : MelonMod
             LoggerInstance.Msg($"Installing: {mapInfo.ScenePrimaryKey}");
             if (mapInfo.ScenePrimaryKey == null)
                 return false;
+
             var locator = Addressables
                 .Instance.m_ResourceLocators[0]
                 .Locator.Cast<UnityEngine.AddressableAssets.ResourceLocators.ResourceLocationMap>();
+
             if (locator.Locations.ContainsKey(mapInfo.ScenePrimaryKey))
                 return false;
-            Il2CppSystem.Collections.Generic.List<UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation> depList =
-                new();
+
+            Il2CppSystem.Collections.Generic.List<UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation> depList = new();
 
             for (int i = 0; i < mapInfo.Dependencies.Length; i++)
             {
