@@ -18,4 +18,8 @@
         <Reference Include="$(ProjectDir)/.ref/*.dll" Private="false" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ShrimpleNetworkingAPI\ShrimpleNetworkingAPI.csproj" />
+  </ItemGroup>
+
 </Project>

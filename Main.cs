@@ -1,5 +1,6 @@
 ﻿using MelonLoader;
 using Newtonsoft.Json;
+using ShrimpleNetworkingAPI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
@@ -7,19 +8,29 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 
 [assembly: MelonInfo(
     typeof(ShrimpleMapLoader.Loader),
-    "ShrimpleMapLoader",
-    "0.0.2",
-    "ZabelTheBanal"
-)]
+    ShrimpleMapLoader.Loader.BuildInfo.Name,
+    ShrimpleMapLoader.Loader.BuildInfo.Version,
+    ShrimpleMapLoader.Loader.BuildInfo.Author
+    )]
+[assembly: MelonColor(255, 255, 170, 238)]
+
 namespace ShrimpleMapLoader;
 
 public class Loader : MelonMod
 {
+    public static class BuildInfo
+    {
+        public const string Name = "ShrimpleMapLoader";
+        public const string Version = "0.1.0";
+        public const string Author = "blankochan";
+    }
+
     static MapPatcher patcher = new();
 
     public override void OnInitializeMelon()
     {
         LoggerInstance.Msg("haaaaai :3");
+        Registration.Register(new($"{BuildInfo.Author}.{BuildInfo.Name}", BuildInfo.Version, requiredForJoin: true, strictVersioning: false));
         MelonEvents.OnSceneWasInitialized.Subscribe(patcher.OnSceneWasInitialized);
     }
 
@@ -32,6 +43,7 @@ public class Loader : MelonMod
     {
         if (sceneName is not "Splashes") return;
 
+        Registration.RegisteredMods.ContainsKey("blankochan.ShrimpleMapLoader"); // this exists PURELY so it errors out if the user doesnt have the api installed
         LoggerInstance.Msg("Installing Extra Maps");
         var locator = Addressables.Instance.m_ResourceLocators[0].Locator.Cast<UnityEngine.AddressableAssets.ResourceLocators.ResourceLocationMap>();
         var originalMaps = locator.Locations["Maps"].Cast<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation>>();
