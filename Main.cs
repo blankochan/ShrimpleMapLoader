@@ -26,12 +26,30 @@ public class Loader : MelonMod
     }
 
     static MapPatcher patcher = new();
+    Registration.NetworkingMetadata networkingMetadata;
 
     public override void OnInitializeMelon()
     {
-        LoggerInstance.Msg("haaaaai :3");
-        Registration.Register(new($"{BuildInfo.Author}.{BuildInfo.Name}", BuildInfo.Version, requiredForJoin: true, strictVersioning: false));
-        MelonEvents.OnSceneWasInitialized.Subscribe(patcher.OnSceneWasInitialized);
+        try
+        {
+            networkingMetadata = new()
+            {
+                Identifer = $"{BuildInfo.Author}.{BuildInfo.Name}",
+                Version = BuildInfo.Version,
+                RequiredForJoin = true,
+                UseStrictVersioning = false,
+            };
+            Il2CppPhoton.Client.PhotonHashtable customMapTable = new();
+            networkingMetadata.CustomPropertiesForRoom.Add("ShrimpleMapLoader_InstalledMaps", customMapTable);
+            networkingMetadata.CustomPropertiesForPlayer.Add("ShrimpleMapLoader_InstalledMaps", customMapTable);
+            Registration.TryRegister(networkingMetadata);
+            MelonEvents.OnSceneWasInitialized.Subscribe(patcher.OnSceneWasInitialized);
+        }
+        catch (System.Exception)
+        {
+            this.Unregister("Error while initalizing ShrimpleNetworkingApi");
+            throw;
+        }
     }
 
     public override void OnDeinitializeMelon()
@@ -50,11 +68,13 @@ public class Loader : MelonMod
         string[] mapPaths = Directory.GetDirectories("./UserData/Maps/");
 
         List<IResourceLocation> newMaps = new();
+        Il2CppPhoton.Client.PhotonHashtable customMapTable = networkingMetadata.CustomPropertiesForRoom["ShrimpleMapLoader_InstalledMaps"].Cast<Il2CppPhoton.Client.PhotonHashtable>();
         foreach (string mapPath in mapPaths)
         {
             if (TryLoadCustomMap(mapPath, out var info))
             {
                 newMaps.Add(locator.Locations[info.ScenePrimaryKey][0]);
+                customMapTable.Add(info.ScenePrimaryKey, "ShrimpleMapLoaded");
             }
             else
             {
