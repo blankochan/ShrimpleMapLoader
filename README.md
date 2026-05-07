@@ -2,6 +2,12 @@
 
 Ports the Airframe Ultra Beta 2 and 3 maps to Airframe Ultra Beta 4
 
+# Known Issues
+
+* Corpses in StormDrain dont collide with the ground
+* Very Rarely the skybox in NightRide turns pure pink
+* Quarry's Water is pure white
+
 # Setup
 Youre going to need 
 * A Copy of Beta 2 With Melonloader installed (for NightRide and Quarry)
@@ -15,4 +21,4 @@ Youre going to need
 3. Copy the subfolders inside `<Your beta 2 or 3 install>/UserData/ExportedMaps` to `<Your beta 4 install>/UserData/Maps` (you may need to create the folder yourself)
 4. Install [`ShrimpleNetworkingAPI`](https://github.com/blankochan/ShrimpleNetworkingAPI/releases/tag/latest) into your `<Your beta 4 install>/Mods` folder
 5. Install [`ShrimpleMapLoader`](https://github.com/blankochan/ShrimpleMapLoader/releases/tag/latest) into your `<Your beta 4 install>/Mods` folder
-6. Enjoy Beta 2 & 3 maps in Beta 4
+6. Have fun!
