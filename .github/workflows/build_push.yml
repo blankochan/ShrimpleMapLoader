@@ -2,7 +2,7 @@ name: Build on push
 on:
   push:
     paths:
-      - "src/**"
+      - "**/*.cs"
       - "*.csproj"
 
 jobs:
@@ -13,4 +13,5 @@ jobs:
         uses: blankochan/ShrimpleBuilder/build@master
         with:
           configuration: "Debug"
+          include_networking_api: true
           download_url: ${{ secrets.REFERENCE_URL }}
