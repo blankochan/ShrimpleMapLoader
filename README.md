@@ -5,8 +5,11 @@ Ports the Airframe Ultra Beta 2 and 3 maps to Airframe Ultra Beta 4
 # Known Issues
 
 * Corpses in StormDrain dont collide with the ground
-* Very Rarely the skybox in NightRide turns pure pink
-* Quarry's Water is pure white
+* Inverse Kinematics are broken in StormDrain
+* The Xray camera is active always (semi intentional)
+* Very rarely the skybox in NightRide turns pure pink
+* Some invisible walls always render when close
+* Quarry's water is pure white
 
 # Setup
 Youre going to need 
