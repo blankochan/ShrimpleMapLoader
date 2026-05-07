@@ -1,0 +1,40 @@
+name: Build custom
+run-name: Build Custom [${{inputs.configuration}}] for [${{inputs.active_dependencies}}] ${{ inputs.constants != '' && format('[{0}]', inputs.constants) || '' }}
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        required: false
+        default: Debug
+        type: choice
+        options:
+          - Release
+          - Debug
+      active_dependencies:
+        required: false
+        default: "BETA_4"
+        type: choice
+        options:
+          - BETA_4
+          - BETA_5
+      constants:
+        required: false
+        default: ""
+        type: string
+      dotnet-version:
+        required: false
+        default: "6.0.x"
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        uses: blankochan/ShrimpleBuilder/build@master
+        with:
+          configuration: ${{inputs.configuration}}
+          active_dependencies: ${{inputs.active_dependencies}}
+          constants: ${{inputs.constants}}
+          dotnet-version: ${{inputs.dotnet-version}}
+          download_url: ${{ secrets.REFERENCE_URL }}

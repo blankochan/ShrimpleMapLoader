@@ -1,0 +1,16 @@
+name: Build on push
+on:
+  push:
+    paths:
+      - "src/**"
+      - "*.csproj"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        uses: blankochan/ShrimpleBuilder/build@master
+        with:
+          configuration: "Debug"
+          download_url: ${{ secrets.REFERENCE_URL }}

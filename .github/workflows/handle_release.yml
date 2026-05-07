@@ -1,0 +1,29 @@
+name: Handle Release
+on:
+  release:
+    types: [prereleased]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Add Changelog
+        uses: blankochan/ShrimpleBuilder/format_release@master
+        with:
+          tag: ${{ github.event.release.tag_name }}
+  build_and_upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Build Release
+        uses: blankochan/ShrimpleBuilder/build@master
+        with:
+          configuration: "Release"
+      - name: Upload to release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: .build/*.dll
