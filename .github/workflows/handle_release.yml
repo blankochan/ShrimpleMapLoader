@@ -22,6 +22,7 @@ jobs:
       - name: Build Release
         uses: blankochan/ShrimpleBuilder/build@master
         with:
+          include_networking_api: true
           configuration: "Release"
       - name: Upload to release
         uses: softprops/action-gh-release@v3

@@ -33,6 +33,7 @@ jobs:
       - name: Build
         uses: blankochan/ShrimpleBuilder/build@master
         with:
+          include_networking_api: true
           configuration: ${{inputs.configuration}}
           active_dependencies: ${{inputs.active_dependencies}}
           constants: ${{inputs.constants}}
